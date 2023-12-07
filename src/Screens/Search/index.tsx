@@ -12,9 +12,14 @@ import {searchStyle} from './style.search';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {theme} from '../../Theme';
 import sermoes from '../../../sermons.json';
+import {useNavigation} from '@react-navigation/native';
 
-const Search: React.FC = () => {
-  const [data, setData] = useState(sermoes.sort());
+const Search: React.FC = ({}) => {
+  const [data, setData] = useState(sermoes.slice(0, 10).sort());
+
+  const {navigate} = useNavigation() as {
+    navigate: (name: string, params: {url: string | null}) => void;
+  };
 
   return (
     <SafeAreaView style={searchStyle.container}>
@@ -44,7 +49,11 @@ const Search: React.FC = () => {
                 {item.title}
               </Text>
               <View style={searchStyle.iconContainer}>
-                <TouchableOpacity disabled={!item.audio}>
+                <TouchableOpacity
+                  disabled={!item.audio}
+                  onPress={() => {
+                    navigate('player', {url: item.audio});
+                  }}>
                   <Icon
                     name="music"
                     size={30}
@@ -53,7 +62,11 @@ const Search: React.FC = () => {
                     }
                   />
                 </TouchableOpacity>
-                <TouchableOpacity disabled={!item.pdf}>
+                <TouchableOpacity
+                  disabled={!item.pdf}
+                  onPress={() => {
+                    navigate('pdf', {url: item.pdf});
+                  }}>
                   <Icon
                     name="file-pdf-box"
                     size={30}

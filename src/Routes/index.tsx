@@ -7,12 +7,44 @@ import Favorite from '../Screens/Favorite';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {theme} from '../Theme';
 import {StyleSheet} from 'react-native';
-// import {StyleSheet} from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Player from '../Screens/Player';
+import PdfView from '../Screens/Pdf';
+
+const Stack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
 const active = theme.colors.white;
 const inactive = theme.colors.white3;
+
+const StackRoutes: React.FC = () => {
+  return (
+    <Stack.Navigator initialRouteName="homeStack">
+      <Stack.Screen
+        name="homeStack"
+        component={TabRoutes}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="player"
+        component={Player}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="pdf"
+        component={PdfView}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const TabRoutes: React.FC = () => {
   return (
@@ -69,4 +101,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default TabRoutes;
+export default StackRoutes;

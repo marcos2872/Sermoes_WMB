@@ -6,7 +6,7 @@ import {StatusBar} from 'react-native';
 function App(): JSX.Element {
   return (
     <NavigationContainer>
-      <StatusBar barStyle={'light-content'} />
+      <StatusBar barStyle={'default'} />
       <Routes />
     </NavigationContainer>
   );
