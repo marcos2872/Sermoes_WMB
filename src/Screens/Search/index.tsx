@@ -18,7 +18,10 @@ const Search: React.FC = ({}) => {
   const [data, setData] = useState(sermoes.slice(0, 10).sort());
 
   const {navigate} = useNavigation() as {
-    navigate: (name: string, params: {url: string | null}) => void;
+    navigate: (
+      name: string,
+      params: {url: string | null; title?: string},
+    ) => void;
   };
 
   return (
@@ -52,7 +55,7 @@ const Search: React.FC = ({}) => {
                 <TouchableOpacity
                   disabled={!item.audio}
                   onPress={() => {
-                    navigate('player', {url: item.audio});
+                    navigate('player', {url: item.audio, title: item.title});
                   }}>
                   <Icon
                     name="music"

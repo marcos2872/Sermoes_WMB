@@ -5,5 +5,7 @@ export const playerStyle = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.black,
+    alignItems: 'center',
+    gap: 10,
   },
 });
