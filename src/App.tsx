@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Routes from './Routes';
 import {StatusBar} from 'react-native';
 import TrackPlayer from 'react-native-track-player';
+import {theme} from './Theme';
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -10,7 +11,7 @@ function App(): JSX.Element {
   }, []);
   return (
     <NavigationContainer>
-      <StatusBar barStyle={'default'} />
+      <StatusBar barStyle={'default'} backgroundColor={theme.colors.black} />
       <Routes />
     </NavigationContainer>
   );

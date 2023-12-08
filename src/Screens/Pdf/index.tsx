@@ -35,6 +35,7 @@ const PdfView: React.FC = () => {
         />
       </TouchableOpacity>
       <Pdf
+        trustAllCerts={false}
         source={source}
         onLoadComplete={(numberOfPages, _filePath) => {
           console.log(`Number of pages: ${numberOfPages}`);

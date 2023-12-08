@@ -5,6 +5,7 @@ export const searchStyle = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.black,
+    paddingTop: 10,
   },
 
   inputView: {
@@ -18,7 +19,7 @@ export const searchStyle = StyleSheet.create({
 
   input: {
     width: '85%',
-    height: 30,
+    height: 40,
     color: theme.colors.black2,
   },
 
