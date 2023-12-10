@@ -14,7 +14,12 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get('https://www.abibliadigital.com.br/api/verses/nvi/sl/random', {})
+      .get('https://www.abibliadigital.com.br/api/verses/nvi/sl/random', {
+        headers: {
+          token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNhdCBEZWMgMDkgMjAyMyAxNjo0ODozNyBHTVQrMDAwMC5tYXJjb2NpbnRpYTIwMDBAZ21haWwuY29tIiwiaWF0IjoxNzAyMTQwNTE3fQ.dwQtoYw1yMHJko-2LonCPnASvS3ntguD3wxOd8c8ojE',
+        },
+      })
       .then(({data}) => {
         setSalmos({
           chapter: data.chapter,

@@ -54,9 +54,14 @@ export const searchStyle = StyleSheet.create({
     color: theme.colors.white,
   },
 
+  year: {
+    fontSize: 16,
+    color: theme.colors.white,
+  },
+
   iconContainer: {
     flexDirection: 'row',
     width: '90%',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
 });

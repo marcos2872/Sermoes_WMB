@@ -11,7 +11,11 @@ import {playerStyle} from './style.player';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {theme} from '../../Theme';
-import TrackPlayer, {useProgress} from 'react-native-track-player';
+import TrackPlayer, {
+  State,
+  usePlaybackState,
+  useProgress,
+} from 'react-native-track-player';
 import {convertTime} from '../../utils/convertTime';
 import Slider from '@react-native-community/slider';
 
@@ -19,9 +23,10 @@ const Player: React.FC = () => {
   const [playing, setPlaying] = useState(false);
   const navigate = useNavigation();
   const progress = useProgress();
+  const playBackState = usePlaybackState();
   const {
     params: {url, title},
-  } = useRoute() as {params: {url: string; title: string}};
+  } = useRoute() as {params: {url: string; title: string; details: string}};
 
   const track = useCallback(async () => {
     await TrackPlayer.add([
@@ -42,16 +47,19 @@ const Player: React.FC = () => {
     };
   }, [track]);
 
-  const play = useCallback(async () => {
-    await TrackPlayer.play();
+  useEffect(() => {
+    setPlaying(playBackState.state === State.Playing);
+  }, [playBackState]);
+
+  const togglePlayback = useCallback(async () => {
+    const state = await TrackPlayer.getState();
+    if (state === State.Playing) {
+      setPlaying(false);
+      return await TrackPlayer.pause();
+    }
     setPlaying(true);
+    return await TrackPlayer.play();
   }, []);
-
-  const pause = useCallback(async () => {
-    await TrackPlayer.pause();
-    setPlaying(false);
-  }, []);
-
   const Track = useCallback(
     () => (
       <View style={playerStyle.trackView}>
@@ -88,18 +96,18 @@ const Player: React.FC = () => {
 
         <View style={playerStyle.track}>
           {playing ? (
-            <TouchableOpacity onPress={pause}>
+            <TouchableOpacity onPress={togglePlayback}>
               <Icon name="pause" size={50} color={theme.colors.white} />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={play}>
+            <TouchableOpacity onPress={togglePlayback}>
               <Icon name="play" size={50} color={theme.colors.white} />
             </TouchableOpacity>
           )}
         </View>
       </View>
     ),
-    [pause, play, playing, progress, title],
+    [togglePlayback, playing, progress, title],
   );
 
   return (

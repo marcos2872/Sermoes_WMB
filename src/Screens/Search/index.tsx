@@ -20,7 +20,7 @@ const Search: React.FC = ({}) => {
   const {navigate} = useNavigation() as {
     navigate: (
       name: string,
-      params: {url: string | null; title?: string},
+      params: {url: string | null; title?: string; details?: string},
     ) => void;
   };
 
@@ -52,10 +52,22 @@ const Search: React.FC = ({}) => {
                 {item.title}
               </Text>
               <View style={searchStyle.iconContainer}>
+                <Text
+                  style={searchStyle.year}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {`${item.datails.slice(0, 3)} 19${item.datails
+                    .split(' ')[1]
+                    .slice(0, 2)}`}
+                </Text>
                 <TouchableOpacity
                   disabled={!item.audio}
                   onPress={() => {
-                    navigate('player', {url: item.audio, title: item.title});
+                    navigate('player', {
+                      url: item.audio,
+                      title: item.title,
+                      details: item.datails,
+                    });
                   }}>
                   <Icon
                     name="music"
