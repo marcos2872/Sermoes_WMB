@@ -18,16 +18,20 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {convertTime} from '../../utils/convertTime';
 import Slider from '@react-native-community/slider';
+import {toggleFavorite, getFavorite} from '../../utils/storage';
 
 const Player: React.FC = () => {
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
+  const [favorite, setFavorite] = useState(false);
   const navigate = useNavigation();
   const progress = useProgress();
   const playBackState = usePlaybackState();
   const {
-    params: {url, title},
-  } = useRoute() as {params: {url: string; title: string; details: string}};
+    params: {url, title, id},
+  } = useRoute() as {
+    params: {url: string; title: string; details: string; id: string};
+  };
 
   const track = useCallback(async () => {
     await TrackPlayer.add([
@@ -41,13 +45,15 @@ const Player: React.FC = () => {
 
   useEffect(() => {
     track();
+    const isFavorite = getFavorite(id);
+    setFavorite(!!isFavorite.length);
 
     return () => {
       console.log('close');
       TrackPlayer.remove([0]);
       TrackPlayer.removeUpcomingTracks();
     };
-  }, [track]);
+  }, [track, id]);
 
   useEffect(() => {
     setPlaying(playBackState.state === State.Playing);
@@ -144,14 +150,18 @@ const Player: React.FC = () => {
           <TouchableOpacity
             style={playerStyle.track_button}
             onPress={() => {
-              console.log('heart');
+              setFavorite(toggleFavorite(id));
             }}>
-            <Icon name="cards-heart" size={20} color={theme.colors.white} />
+            <Icon
+              name={favorite ? 'cards-heart' : 'cards-heart-outline'}
+              size={20}
+              color={theme.colors.white}
+            />
           </TouchableOpacity>
         </View>
       </View>
     ),
-    [togglePlayback, playing, progress, title, speed],
+    [togglePlayback, playing, progress, title, speed, id, favorite],
   );
 
   return (

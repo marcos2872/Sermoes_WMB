@@ -1,12 +1,9 @@
-import pt from '../../sermons.json';
-import pt_en from '../../sermons2.json';
+import json from '../../sermoes.json';
 
-export default function () {
-  return pt.map(data => {
-    const audio = pt_en.find(({title}) => title === data.title);
-    return {
-      ...data,
-      audio_en: audio?.audio,
-    };
-  });
+export function getData() {
+  return json;
+}
+
+export function getByTitle(title: string) {
+  return json.filter(data => data.title.includes(title));
 }
