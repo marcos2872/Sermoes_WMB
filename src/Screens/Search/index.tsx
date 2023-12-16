@@ -11,11 +11,11 @@ import {
 import {searchStyle} from './style.search';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {theme} from '../../Theme';
-import sermoes from '../../../sermons.json';
+import sermoes from '../../utils/getData';
 import {useNavigation} from '@react-navigation/native';
 
 const Search: React.FC = ({}) => {
-  const [data, setData] = useState(sermoes.slice(0, 10).sort());
+  const [data, setData] = useState(sermoes().slice(0, 10).sort());
 
   const {navigate} = useNavigation() as {
     navigate: (
@@ -32,7 +32,7 @@ const Search: React.FC = ({}) => {
           style={searchStyle.input}
           placeholder="Qual sermão quer ouvir?"
           onChangeText={text => {
-            setData(sermoes.filter(({title}) => title.includes(text)));
+            setData(sermoes().filter(({title}) => title.includes(text)));
           }}
         />
       </View>
@@ -56,11 +56,10 @@ const Search: React.FC = ({}) => {
                   style={searchStyle.year}
                   numberOfLines={1}
                   ellipsizeMode="tail">
-                  {`${item.datails.slice(0, 3)} 19${item.datails
-                    .split(' ')[1]
-                    .slice(0, 2)}`}
+                  {`19${item.datails.split(' ')[1].slice(0, 2)}`}
                 </Text>
                 <TouchableOpacity
+                  style={searchStyle.buttonAudio}
                   disabled={!item.audio}
                   onPress={() => {
                     navigate('player', {
@@ -69,6 +68,26 @@ const Search: React.FC = ({}) => {
                       details: item.datails,
                     });
                   }}>
+                  <Text style={searchStyle.year}>Port</Text>
+                  <Icon
+                    name="music"
+                    size={30}
+                    color={
+                      item.audio ? theme.colors.white : theme.colors.white3
+                    }
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={searchStyle.buttonAudio}
+                  disabled={!item.audio_en}
+                  onPress={() => {
+                    navigate('player', {
+                      url: item.audio_en || '',
+                      title: item.title,
+                      details: item.datails,
+                    });
+                  }}>
+                  <Text style={searchStyle.year}>Eng-Port</Text>
                   <Icon
                     name="music"
                     size={30}

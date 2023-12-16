@@ -63,5 +63,12 @@ export const searchStyle = StyleSheet.create({
     flexDirection: 'row',
     width: '90%',
     justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  buttonAudio: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
   },
 });
