@@ -29,17 +29,26 @@ const Home: React.FC = () => {
       })
       .catch(error => {
         console.log(error);
+        setSalmos({
+          chapter: '',
+          text: '',
+          number: '',
+        });
       });
   }, []);
 
   return (
     <SafeAreaView style={homeStyle.container}>
       <View style={homeStyle.salmoContainer}>
-        <Text style={homeStyle.title}>Salmo do Dia</Text>
-        <Text
-          style={
-            homeStyle.text
-          }>{`${salmos?.text} Salmos ${salmos?.chapter}:${salmos?.number}`}</Text>
+        {salmos?.text && (
+          <>
+            <Text style={homeStyle.title}>Salmo do Dia</Text>
+            <Text
+              style={
+                homeStyle.text
+              }>{`${salmos?.text} Salmos ${salmos?.chapter}:${salmos?.number}`}</Text>
+          </>
+        )}
       </View>
     </SafeAreaView>
   );

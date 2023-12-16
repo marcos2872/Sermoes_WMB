@@ -21,6 +21,7 @@ import Slider from '@react-native-community/slider';
 
 const Player: React.FC = () => {
   const [playing, setPlaying] = useState(false);
+  const [speed, setSpeed] = useState(1);
   const navigate = useNavigation();
   const progress = useProgress();
   const playBackState = usePlaybackState();
@@ -35,6 +36,7 @@ const Player: React.FC = () => {
         title,
       },
     ]);
+    TrackPlayer.setVolume(1);
   }, [url, title]);
 
   useEffect(() => {
@@ -60,6 +62,7 @@ const Player: React.FC = () => {
     setPlaying(true);
     return await TrackPlayer.play();
   }, []);
+
   const Track = useCallback(
     () => (
       <View style={playerStyle.trackView}>
@@ -95,36 +98,75 @@ const Player: React.FC = () => {
         </View>
 
         <View style={playerStyle.track}>
-          {playing ? (
-            <TouchableOpacity onPress={togglePlayback}>
-              <Icon name="pause" size={50} color={theme.colors.white} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={togglePlayback}>
-              <Icon name="play" size={50} color={theme.colors.white} />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            style={playerStyle.track_button}
+            onPress={async () => {
+              if (speed === 1) {
+                await TrackPlayer.setRate(1.5);
+                return setSpeed(1.5);
+              }
+              if (speed === 1.5) {
+                await TrackPlayer.setRate(2);
+                return setSpeed(2);
+              }
+              if (speed === 2) {
+                await TrackPlayer.setRate(0.5);
+                return setSpeed(0.5);
+              }
+              await TrackPlayer.setRate(1);
+              return setSpeed(1);
+            }}>
+            <Text style={playerStyle.text}>{speed}x</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={playerStyle.track_button}
+            onPress={() => {
+              TrackPlayer.seekTo(progress.position - 10);
+            }}>
+            <Icon name="rewind-10" size={25} color={theme.colors.white} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={togglePlayback}
+            style={playerStyle.track_button}>
+            <Icon
+              name={playing ? 'pause' : 'play'}
+              size={50}
+              color={theme.colors.white}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={playerStyle.track_button}
+            onPress={() => {
+              TrackPlayer.seekTo(progress.position + 10);
+            }}>
+            <Icon name="fast-forward-10" size={25} color={theme.colors.white} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={playerStyle.track_button}
+            onPress={() => {
+              console.log('heart');
+            }}>
+            <Icon name="cards-heart" size={20} color={theme.colors.white} />
+          </TouchableOpacity>
         </View>
       </View>
     ),
-    [togglePlayback, playing, progress, title],
+    [togglePlayback, playing, progress, title, speed],
   );
 
   return (
     <SafeAreaView style={playerStyle.container}>
       {progress.duration ? (
         <>
-          <TouchableOpacity
-            onPress={() => {
-              navigate.goBack();
-            }}
-            style={playerStyle.goBack}>
-            <Icon
-              name="subdirectory-arrow-left"
-              size={25}
-              color={theme.colors.white}
-            />
-          </TouchableOpacity>
+          <View style={playerStyle.goBackContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigate.goBack();
+              }}
+              style={playerStyle.goBack}>
+              <Icon name="arrow-left" size={25} color={theme.colors.white} />
+            </TouchableOpacity>
+          </View>
           <Track />
         </>
       ) : (

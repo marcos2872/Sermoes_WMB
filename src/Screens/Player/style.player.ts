@@ -10,8 +10,13 @@ export const playerStyle = StyleSheet.create({
     gap: 10,
   },
 
-  goBack: {
+  goBackContainer: {
     width: '100%',
+  },
+
+  goBack: {
+    width: '15%',
+    alignItems: 'center',
   },
 
   trackView: {
@@ -52,6 +57,14 @@ export const playerStyle = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
+    position: 'relative',
+  },
+
+  track_button: {
+    width: '15%',
+    minHeight: 40,
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });
