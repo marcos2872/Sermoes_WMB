@@ -18,7 +18,14 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {convertTime} from '../../utils/convertTime';
 import Slider from '@react-native-community/slider';
-import {toggleFavorite, getFavorite} from '../../utils/storage';
+import {
+  toggleFavorite,
+  getFavorite,
+  getProgressPosition,
+  setProgressPosition,
+} from '../../utils/storage';
+
+let time = 0;
 
 const Player: React.FC = () => {
   const [playing, setPlaying] = useState(false);
@@ -40,6 +47,7 @@ const Player: React.FC = () => {
         title,
       },
     ]);
+    await TrackPlayer.pause();
     TrackPlayer.setVolume(1);
   }, [url, title]);
 
@@ -48,8 +56,12 @@ const Player: React.FC = () => {
     const isFavorite = getFavorite(id);
     setFavorite(!!isFavorite.length);
 
+    console.log(getProgressPosition(id));
+    TrackPlayer.seekTo(getProgressPosition(id) || 0);
+
     return () => {
-      console.log('close');
+      setProgressPosition(id, time);
+      TrackPlayer.stop();
       TrackPlayer.remove([0]);
       TrackPlayer.removeUpcomingTracks();
     };
@@ -164,6 +176,7 @@ const Player: React.FC = () => {
     [togglePlayback, playing, progress, title, speed, id, favorite],
   );
 
+  time = progress.position;
   return (
     <SafeAreaView style={playerStyle.container}>
       {progress.duration ? (

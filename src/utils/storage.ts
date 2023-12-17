@@ -52,3 +52,57 @@ export function getFavorite(id?: string) {
 
   return favorites;
 }
+
+export function setProgressPosition(id: string, position: number): void {
+  const progressPosition = storage.getString('app.progressPosition');
+
+  if (!progressPosition) {
+    storage.set(
+      'app.progressPosition',
+      JSON.stringify([
+        {
+          id,
+          position,
+        },
+      ]),
+    );
+  }
+
+  const progress: {id: string; position: number}[] = JSON.parse(
+    progressPosition || '',
+  );
+
+  const alreadyExist = progress.some(data => data.id === id);
+
+  if (alreadyExist) {
+    const newProgress = progress.map(data => {
+      if (data.id === id) {
+        return {
+          ...data,
+          position,
+        };
+      }
+      return data;
+    });
+    storage.set('app.progressPosition', JSON.stringify(newProgress));
+    return;
+  }
+
+  storage.set(
+    'app.progressPosition',
+    JSON.stringify([...progress, {id, position}]),
+  );
+}
+
+export function getProgressPosition(id: string) {
+  const progressPosition = storage.getString('app.progressPosition');
+
+  if (!progressPosition) {
+    return undefined;
+  }
+
+  const progress: {id: string; position: number}[] =
+    JSON.parse(progressPosition);
+
+  return progress.find(data => data.id === id)?.position;
+}
