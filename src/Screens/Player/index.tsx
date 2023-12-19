@@ -54,18 +54,18 @@ const Player: React.FC = () => {
   useEffect(() => {
     track();
     const isFavorite = getFavorite(id);
+
     setFavorite(!!isFavorite.length);
 
-    console.log(getProgressPosition(id));
-    TrackPlayer.seekTo(getProgressPosition(id) || 0);
+    TrackPlayer.seekTo(getProgressPosition(url) || 0);
 
     return () => {
-      setProgressPosition(id, time);
+      setProgressPosition(url, time);
       TrackPlayer.stop();
       TrackPlayer.remove([0]);
       TrackPlayer.removeUpcomingTracks();
     };
-  }, [track, id]);
+  }, [track, url, id]);
 
   useEffect(() => {
     setPlaying(playBackState.state === State.Playing);
