@@ -6,4 +6,8 @@ export const favoriteStyle = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.black,
   },
+
+  title: {
+    color: theme.colors.white,
+  },
 });
