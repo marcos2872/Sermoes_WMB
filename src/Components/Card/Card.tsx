@@ -73,7 +73,7 @@ const Card: React.FC<{data: IData}> = ({data}) => {
           <TouchableOpacity
             disabled={!data.pdf}
             onPress={() => {
-              navigate('pdf', {url: data.pdf});
+              navigate('pdf', {url: data.pdf, id: data.id});
             }}>
             <Icon
               name="file-pdf-box"

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView} from 'react-native';
 import {favoriteStyle} from './style.favorite';
 import {IData} from '../../Interfaces/IData';
@@ -8,12 +8,24 @@ import Card from '../../Components/Card/Card';
 
 const Favorite: React.FC = () => {
   const [favorites, setFavorites] = useState<IData[] | []>([]);
-  useEffect(() => {
+
+  const getFavorites = useCallback(() => {
     const data = getData();
+
     const favoritesIds = getFavorite();
 
     setFavorites(data.filter(item => favoritesIds.includes(item.id)));
   }, []);
+
+  useEffect(() => {
+    console.log('entra');
+    getFavorites();
+
+    return () => {
+      setFavorites([]);
+      console.log('sai');
+    };
+  }, [getFavorites]);
   return (
     <SafeAreaView style={favoriteStyle.container}>
       <ScrollView>

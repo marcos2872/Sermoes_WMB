@@ -102,3 +102,56 @@ export function getProgressPosition(id: string) {
 
   return progress.find(data => data.id === id)?.position;
 }
+
+export function setPdfPosition(id: string, position: number): void {
+  // storage.delete('app.pdfPosition');
+
+  const pdfPosition = storage.getString('app.pdfPosition');
+  if (pdfPosition !== undefined) {
+    const progress: {id: string; position: number}[] = JSON.parse(pdfPosition);
+    const alreadyExist = progress.some(data => data.id === id);
+    if (alreadyExist) {
+      const newProgress = progress.map(data => {
+        if (data.id === id) {
+          return {
+            id,
+            position,
+          };
+        }
+        return data;
+      });
+      storage.delete('app.pdfPosition');
+      storage.set('app.pdfPosition', JSON.stringify(newProgress));
+      return;
+    }
+    storage.delete('app.pdfPosition');
+    storage.set(
+      'app.pdfPosition',
+      JSON.stringify([...progress, {id, position}]),
+    );
+    return;
+  }
+  storage.set(
+    'app.pdfPosition',
+    JSON.stringify([
+      {
+        id,
+        position,
+      },
+    ]),
+  );
+}
+
+export function getPdfPosition(id: string) {
+  // storage.delete('app.pdfPosition');
+  const pdfPosition = storage.getString('app.pdfPosition');
+  console.log('get', pdfPosition);
+
+  if (!pdfPosition) {
+    return 1;
+  }
+
+  const progress: {id: string; position: number}[] = JSON.parse(pdfPosition);
+
+  return progress.find(data => data.id === id)?.position || 1;
+}

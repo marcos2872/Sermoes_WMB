@@ -1,53 +1,87 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
+  View,
+  Text,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Pdf from 'react-native-pdf';
 import {theme} from '../../Theme';
+import {
+  getPdfPosition,
+  setPdfPosition,
+  toggleFavorite,
+} from '../../utils/storage';
+
+let positionPdf = 0;
 
 const PdfView: React.FC = () => {
   const navigate = useNavigation();
+  const [favorite, setFavorite] = useState(false);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageCurrent, setPageCurrent] = useState(0);
+  const [pages, setPages] = useState(0);
+
   const {
-    params: {url},
-  } = useRoute() as {params: {url: string}};
+    params: {url, id},
+  } = useRoute() as {params: {url: string; id: string}};
 
   const source = {
     uri: url,
     cache: true,
   };
 
+  useEffect(() => {
+    const position = getPdfPosition(id);
+    setPageCurrent(position || 0);
+
+    return () => {
+      setPdfPosition(id, positionPdf);
+    };
+  }, [id]);
+
   return (
     <SafeAreaView style={pdfStyle.container}>
-      <TouchableOpacity
-        onPress={() => {
-          navigate.goBack();
-        }}
-        style={pdfStyle.goBack}>
-        <Icon
-          name="subdirectory-arrow-left"
-          size={25}
-          color={theme.colors.black}
-        />
-      </TouchableOpacity>
+      <View style={pdfStyle.option}>
+        <TouchableOpacity
+          onPress={() => {
+            navigate.goBack();
+          }}>
+          <Icon
+            name="subdirectory-arrow-left"
+            size={25}
+            color={theme.colors.black}
+          />
+        </TouchableOpacity>
+        <Text>{`${pageNumber} / ${pages}`}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            setFavorite(toggleFavorite(id));
+          }}>
+          <Icon
+            name={favorite ? 'cards-heart' : 'cards-heart-outline'}
+            size={25}
+            color={theme.colors.black}
+          />
+        </TouchableOpacity>
+      </View>
       <Pdf
+        page={pageCurrent}
         trustAllCerts={false}
         source={source}
         onLoadComplete={(numberOfPages, _filePath) => {
-          console.log(`Number of pages: ${numberOfPages}`);
+          setPages(numberOfPages);
         }}
         onPageChanged={(page, _numberOfPages) => {
-          console.log(`Current page: ${page}`);
+          setPageNumber(page);
+          positionPdf = page;
         }}
         onError={error => {
           console.log(error);
-        }}
-        onPressLink={uri => {
-          console.log(`Link pressed: ${uri}`);
         }}
         style={pdfStyle.pdf}
       />
@@ -71,7 +105,10 @@ const pdfStyle = StyleSheet.create({
     height: Dimensions.get('window').height,
   },
 
-  goBack: {
+  option: {
     width: '100%',
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });

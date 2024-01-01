@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, ScrollView, TextInput, View} from 'react-native';
 import {searchStyle} from './style.search';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {theme} from '../../Theme';

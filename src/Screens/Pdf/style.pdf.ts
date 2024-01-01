@@ -13,6 +13,10 @@ const pdfStyle = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+
+  goBack: {
+    width: '100%',
+  },
 });
 
 export default pdfStyle;
