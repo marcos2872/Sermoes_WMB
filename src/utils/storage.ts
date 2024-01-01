@@ -43,7 +43,7 @@ export function getFavorite(id?: string) {
   const favorites: IFavorites = JSON.parse(favoriteExist || '[]');
 
   if (id) {
-    return favorites.filter(data => data === id);
+    return !!favorites.find(data => data === id);
   }
 
   return favorites;

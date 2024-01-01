@@ -12,6 +12,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Pdf from 'react-native-pdf';
 import {theme} from '../../Theme';
 import {
+  getFavorite,
   getPdfPosition,
   setPdfPosition,
   toggleFavorite,
@@ -38,6 +39,10 @@ const PdfView: React.FC = () => {
   useEffect(() => {
     const position = getPdfPosition(id);
     setPageCurrent(position || 0);
+
+    console.log(getFavorite(id));
+
+    setFavorite(getFavorite(id) as boolean);
 
     return () => {
       setPdfPosition(id, positionPdf);
