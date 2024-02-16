@@ -6,6 +6,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.black,
     paddingTop: 20,
+    gap: 20,
   },
 
   salmoContainer: {
@@ -23,5 +24,13 @@ export default StyleSheet.create({
 
   text: {
     color: theme.colors.white,
+  },
+
+  wmb: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
   },
 });
