@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {theme} from '../../Theme';
 
 export default StyleSheet.create({
@@ -22,8 +22,14 @@ export default StyleSheet.create({
     fontWeight: '600',
   },
 
-  text: {
+  link: {
     color: theme.colors.white,
+  },
+
+  image: {
+    width: Dimensions.get('window').width - 20,
+    height: Dimensions.get('window').width + 100,
+    borderRadius: 10,
   },
 
   wmb: {
